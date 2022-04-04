@@ -1,17 +1,32 @@
-## 常见算法题代码模板
+## 代码仓库
 
-看别人的模板虽然整理的很好，但是因为不熟悉从来没用上。终究还是要自己来写模板、整理模板。
+存些想存的代码。
 
 ### 常规的模板
 
-✅[树状数组](./codes/BIT.cpp)
+看别人的模板虽然整理的很好，但是因为不熟悉从来没用上。终究还是要自己来写模板、整理模板。
 
-✅[字符串哈希](./codes/stringHash.cpp)
+✅[树状数组](./template_codes/BIT.cpp)
 
-✅[字符串哈希-双模数](./codes/stringDoubleHash.cpp)
+✅[字符串哈希](./template_codes/stringHash.cpp)
 
-✅[字典树](./codes/Trie.cpp)
+✅[字符串哈希-双模数](./template_codes/stringDoubleHash.cpp)
+
+✅[字典树](./template_codes/Trie.cpp)
+
+### 部分STL等c++内置函数库的简单实现
+
+[ ] string类
+
+[ ] unique_ptr类
+
+[ ] share_ptr类
+
 
 ### 涨见识
 
+看些大佬的操作涨涨见识。
+
 ✅[unorder_map哈希碰撞的解决](./extend_codes/hashHitOfUMP.cpp)
+
+

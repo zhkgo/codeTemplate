@@ -16,11 +16,11 @@
 
 ### 部分STL等c++内置函数库的简单实现
 
-[ ] string类
+- [ ] string类
 
-[ ] unique_ptr类
+- [ ] unique_ptr类
 
-[ ] share_ptr类
+- [ ] share_ptr类
 
 
 ### 涨见识

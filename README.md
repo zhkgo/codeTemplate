@@ -16,7 +16,7 @@
 
 ### 部分STL等c++内置函数库的简单实现
 
-- [ ] string类
+✅[string类](./inner_cpp/string.cpp)
 
 - [ ] unique_ptr类
 

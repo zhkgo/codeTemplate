@@ -18,9 +18,9 @@
 
 ✅[string类](./inner_cpp/string/string.cpp)
 
-✅ [unique_ptr类](./inner_cpp/smart_ptr/unique_ptr.h)
+✅[unique_ptr类](./inner_cpp/smart_ptr/unique_ptr.h)
 
-- [ ] share_ptr类
+✅[share_ptr类](./inner_cpp/smart_ptr/share_ptr.h)
 
 
 ### 涨见识

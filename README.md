@@ -16,11 +16,14 @@
 
 ### 部分STL等c++内置函数库的简单实现
 
+✅[vector类](./inner_cpp/vector/vector.cpp)
+
 ✅[string类](./inner_cpp/string/string.cpp)
 
 ✅[unique_ptr类](./inner_cpp/smart_ptr/unique_ptr.h)
 
 ✅[share_ptr类](./inner_cpp/smart_ptr/share_ptr.h)
+
 
 
 ### 涨见识

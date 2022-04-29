@@ -24,7 +24,9 @@
 
 ✅[share_ptr类](./inner_cpp/smart_ptr/share_ptr.h)
 
-- [ ] 线程池实现
+✅[线程池实现,队列+锁](./inner_cpp/threadpool.h)
+
+- [ ] 无锁队列实现
 
 ### 涨见识
 

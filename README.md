@@ -14,6 +14,7 @@
 
 ✅[字典树](./template_codes/Trie.cpp)
 
+
 ### 部分STL等c++内置函数库的简单实现
 
 ✅[vector类](./inner_cpp/vector/vector.cpp)
@@ -29,6 +30,15 @@
 ✅[无锁队列实现](./inner_cpp/lockfree_queue/lckfree_queue.h)
 
 ✅[基于无锁队列的线程池实现](./inner_cpp/lockfree_queue/threadpool.h)
+
+### 游戏模块
+
+✅[魔兽世界之一：备战](./gameMoudle/World_of_Warcraft_1)
+
+- [ ] 魔兽世界之二：装备
+
+- [ ] 魔兽世界之三：开战
+
 
 ### 涨见识
 

@@ -35,7 +35,7 @@
 
 ✅[魔兽世界之一：备战](./gameMoudle/World_of_Warcraft_1)
 
-- [ ] 魔兽世界之二：装备
+✅[魔兽世界之二：装备](./gameMoudle/World_of_Warcraft_2) 
 
 - [ ] 魔兽世界之三：开战
 

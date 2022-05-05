@@ -37,7 +37,7 @@
 
 ✅[魔兽世界之二：装备](./gameMoudle/World_of_Warcraft_2) 
 
-- [ ] 魔兽世界之三：开战
+✅[魔兽世界之三：开战](./gameMoudle/World_of_Warcraft_3) 
 
 
 ### 涨见识

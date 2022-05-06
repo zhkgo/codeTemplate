@@ -4,7 +4,7 @@
 #include<list>
 #include<map> 
 #include<algorithm>
-//#include<typeinfo>
+#include<typeinfo>
 #include<vector>
 #include<assert.h>
 #define MESSAGE_LENGTH 300
@@ -18,6 +18,16 @@ class Headquarter;
 class Warrior;
 class City;
 
+/*
+2
+2 10 10 1000
+10 10 10 10 10
+2 2 2 2 2
+
+6 9 10 6000
+120 20 30 10 20
+150 50 20 50 150
+*/
 //全局日志 
 class World{
 public:
@@ -255,7 +265,7 @@ public:
 	}
 	virtual bool goAhead(int dir){//武士朝前走 
 		health -= health/10;
-		Warrior::goAhead(dir);
+		return Warrior::goAhead(dir);
 	}
 };
 class lion:public Warrior{
@@ -334,6 +344,7 @@ public:
 		cur=0;
 	}
 	void enemysReach(Warrior* wa){
+//		cout<<"========enemysReach========"<<endl;
 		enemys.push_back(wa);
 	}
 	Warrior* born(int hero_id){//制造武士 
@@ -463,6 +474,24 @@ bool Warrior::goAhead(int dir){//武士朝前走
 		(mlog.h2)->enemysReach(this);
 	}
 	return true; 
+//		char message[MESSAGE_LENGTH];
+//		message[0]=0;
+//		if(pos==0&&dir==-1){
+//			sprintf(message,"%s reached red headquarter with %d elements and force %d"
+//			,totName().c_str(),health,ack);
+//		}else if(pos==mlog.citys.size()+1&&dir==1){
+//			sprintf(message,"%s reached blue headquarter with %d elements and force %d"
+//			,totName().c_str(),health,ack);
+//		}
+//		if(message[0]==0){
+//			return false;
+//		}
+//		mlog.log(message);
+//		if(pos==0){
+//			mlog.log("red headquarter was taken");
+//		}else{
+//			mlog.log("blue headquarter was taken");
+//		}
 }
 /*
 arm implements
@@ -676,7 +705,13 @@ bool World::addTime(){
 	return false;
 }
 
+/*
+2
+200 4 5 1000
+24 50 30 190 4
+89 7 23 67 4
 
+*/
 int main(){
 //	freopen("in.txt","r",stdin);
 //	freopen("out.txt","w",stdout);
@@ -684,7 +719,7 @@ int main(){
 	int T;
 	cin>>T;
 	for(int cs=1;cs<=T;cs++){
-		int M,health,N,K,TIME;
+		int M,N,K,TIME;
 		cin>>M>>N>>K>>TIME;
 		for(int i=0;i<5;i++){
 			cin>>HP[i];

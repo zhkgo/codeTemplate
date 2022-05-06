@@ -20,7 +20,7 @@ int main(){
 	int T;
 	cin>>T;
 	for(int cs=1;cs<=T;cs++){
-		int M,health,N,K,TIME;
+		int M,N,K,TIME;
 		cin>>M>>N>>K>>TIME;
 		for(int i=0;i<5;i++){
 			cin>>HP[i];

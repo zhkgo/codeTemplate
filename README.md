@@ -39,6 +39,10 @@
 
 ✅[魔兽世界之三：开战](./gameMoudle/World_of_Warcraft_3) 
 
+### 设计模式
+
+
+✅[visitor模式](./design_mode/visitor/)
 
 ### 涨见识
 

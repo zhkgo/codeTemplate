@@ -2,7 +2,7 @@
 
 存些想存的代码。
 
-### 常规的模板
+### 🀄常规的模板
 
 看别人的模板虽然整理的很好，但是因为不熟悉从来没用上。终究还是要自己来写模板、整理模板。
 
@@ -15,7 +15,7 @@
 ✅[字典树](./template_codes/Trie.cpp)
 
 
-### 部分STL等c++内置函数库的简单实现
+### 🔨部分STL等c++内置函数库的简单实现
 
 ✅[vector类](./inner_cpp/vector/vector.cpp)
 
@@ -31,7 +31,7 @@
 
 ✅[基于无锁队列的线程池实现](./inner_cpp/lockfree_queue/threadpool.h)
 
-### 游戏模块
+### ⚔游戏模块
 
 ✅[魔兽世界之一：备战](./gameMoudle/World_of_Warcraft_1)
 
@@ -39,12 +39,12 @@
 
 ✅[魔兽世界之三：开战](./gameMoudle/World_of_Warcraft_3) 
 
-### 设计模式
+### ✨设计模式
 
 
 ✅[visitor模式](./design_mode/visitor/)
 
-### 涨见识
+### 🎲涨见识
 
 看些大佬的操作涨涨见识。
 

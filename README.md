@@ -6,14 +6,17 @@
 
 看别人的模板虽然整理的很好，但是因为不熟悉从来没用上。终究还是要自己来写模板、整理模板。
 
-&nbsp; &nbsp; &nbsp;&nbsp; ✅[树状数组](./template_codes/BIT.cpp)
+&nbsp; &nbsp; &nbsp;&nbsp; ✅[树状数组](./template_codes/BIT/BIT.cpp)
 
-&nbsp; &nbsp; &nbsp;&nbsp; ✅[字符串哈希](./template_codes/stringHash.cpp)
+&nbsp; &nbsp; &nbsp;&nbsp; ✅[字符串哈希](./template_codes/stringHash/stringHash.cpp)
 
-&nbsp; &nbsp; &nbsp;&nbsp; ✅[字符串哈希-双模数](./template_codes/stringDoubleHash.cpp)
+&nbsp; &nbsp; &nbsp;&nbsp; ✅[字符串哈希-双模数](./template_codes/stringHash/stringDoubleHash.cpp)
 
-&nbsp; &nbsp; &nbsp;&nbsp; ✅[字典树](./template_codes/Trie.cpp)
+&nbsp; &nbsp; &nbsp;&nbsp; ✅[字典树](./template_codes/Trie/Trie.cpp)
 
+&nbsp; &nbsp; &nbsp;&nbsp; ✅[动态开点线段树区间加](./template_codes/segmentTree/segmentTree_add.h)
+
+&nbsp; &nbsp; &nbsp;&nbsp; ✅[动态开点线段树区间赋值](./template_codes/segmentTree/segmentTree_update.h)
 
 ### 🔨部分STL等c++内置函数库的简单实现
 

@@ -22,6 +22,8 @@
 
 &nbsp; &nbsp; &nbsp;&nbsp; ✅[动态开点线段树区间赋值-重载new加速](./template_codes/segmentTree/segmentTree_update_fast.h)
 
+&nbsp; &nbsp; &nbsp;&nbsp; ✅[动态开点线段树区间赋值MAX-重载new加速](./template_codes/segmentTree/segmentTree_update_max_fast.h)
+
 ### 🔨部分STL等c++内置函数库的简单实现
 
 &nbsp; &nbsp; &nbsp;&nbsp; ✅[vector类](./inner_cpp/vector/vector.cpp)

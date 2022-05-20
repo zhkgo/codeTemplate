@@ -14,6 +14,7 @@
 
 &nbsp; &nbsp; &nbsp;&nbsp; ✅[字典树](./template_codes/Trie/Trie.cpp)
 
+
 &nbsp; &nbsp; &nbsp;&nbsp; ✅[动态开点线段树区间加](./template_codes/segmentTree/segmentTree_add.h)
 
 &nbsp; &nbsp; &nbsp;&nbsp; ✅[动态开点线段树区间赋值](./template_codes/segmentTree/segmentTree_update.h)
@@ -47,6 +48,10 @@
 &nbsp; &nbsp; &nbsp;&nbsp; ✅[魔兽世界之二：装备](./gameMoudle/World_of_Warcraft_2) 
 
 &nbsp; &nbsp; &nbsp;&nbsp; ✅[魔兽世界之三：开战](./gameMoudle/World_of_Warcraft_3) 
+
+&nbsp; &nbsp; &nbsp;&nbsp; ✅[魔兽世界终极版](./gameMoudle/World_of_Warcraft_4) 
+
+&nbsp; &nbsp; &nbsp;&nbsp; ❌魔兽世界重制版——智能指针+模块化+RPC接口
 
 ### ✨设计模式
 

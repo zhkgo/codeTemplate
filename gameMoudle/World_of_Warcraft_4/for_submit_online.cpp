@@ -7,6 +7,7 @@
 #include<typeinfo>
 #include<vector>
 #include<assert.h>
+#include<set>
 #define MESSAGE_LENGTH 300
 using namespace std;
 
@@ -34,9 +35,10 @@ public:
 	int now;
 	Headquarter *h1,*h2;
 	vector<City> citys;
+	int N,R;
 	World():now(0){
 	}
-	void reset(Headquarter* _h1,Headquarter *_h2,int N);
+	void reset(Headquarter* _h1,Headquarter *_h2,int N,int R);
 	void log(const string &message,bool timer=true){//flg 表示是否输出时间 
 		if(timer)
 			printf("%03d:%02d %s\n",now/60,now%60,message.c_str());
@@ -71,16 +73,24 @@ public:
 		}
 		return true;
 	}
-	virtual bool attack(Warrior* owner,Warrior* enemy);
+	static bool arm_cmp_report(Arm* a1,Arm* a2){
+		return a1->arm_id>a2->arm_id;
+	}
+	virtual bool attack(Warrior* owner,Warrior* enemy,bool first);
+	virtual bool isDestory(); 
+	virtual string introduce();
 	virtual ~Arm(){
 	}
 };
 //剑 
 class sword:public Arm{
 public:
-	sword():Arm(0,20,10000000){
+	int ack;
+	sword(int ack=0):Arm(0,20,10000000),ack(ack){
 	}
-//	bool attack(Warrior* owner,Warrior* enemy);
+	bool attack(Warrior* owner,Warrior* enemy,bool first);
+	bool isDestory();
+	string introduce();
 };
 //炸弹 
 class bomb:public Arm{
@@ -92,23 +102,25 @@ public:
 //弓箭 
 class arrow:public Arm{
 public:
-	arrow():Arm(2,30,2){
+	int ack;
+	arrow(int ack):Arm(2,30,3),ack(ack){
 	}
-//	bool attack(Warrior* owner,Warrior* enemy);
+	string introduce();
+	virtual bool attack(Warrior* owner,Warrior* enemy,bool first=false);
 };
 class ArmFactory{
 public:
-	static Arm* product(int id){
-		Arm* arm=nullptr;
+	static Arm* product(int id,int swordAck=0){
+		Arm* arm=nullptr; 
 		switch(id){
 			case 0:
-				arm = static_cast<Arm*> (new sword());
+				arm = static_cast<Arm*> (new sword(swordAck));
 				break;
 			case 1:
 				arm = static_cast<Arm*> (new bomb());
 				break;
 			case 2:
-				arm = static_cast<Arm*> (new arrow());
+				arm = static_cast<Arm*> (new arrow(mlog.R));
 				break;
 		}
 		return arm;
@@ -118,9 +130,15 @@ public:
 class City{
 public:
 	int c_id;
+	int power;//生命元 
+	int banner;//旗帜 banner 0 无旗帜 banner 1 红旗 banner 2 蓝旗 
+	int winCnt;//胜利计数，如果达2 则红方占领 如果达-2则蓝方占领 
 	list<Warrior*> red_warriors,blue_warriors;
 	City(int c_id):c_id(c_id){
 //		cout<<blue_warriors.size()<<endl; 
+		power=0;
+		banner=0;
+		winCnt=0;
 	}
 	void addWarrior(Warrior* p);
 	void removeWarrior(Warrior* p);
@@ -131,6 +149,12 @@ public:
 	void report(); 
 	void warriorReport();
 	void lionRun();
+	void generatePower(); 
+	void transPower();
+	void useArrow();
+	void useBomb();
+	Warrior* getRedWarrior();
+	Warrior* getBlueWarrior();
 };
 //武士类 
 class Warrior{ 
@@ -143,12 +167,13 @@ public:
 	list<Arm*> arms;//所有持有武器 
 	int pos;
 	string headq;
-	decltype(arms.begin()) curArm;//当前使用武器 
+	int stopGo; 
 	Warrior(int id=1,const string &name="warrior",int health=10,int ack=5,const string& headq="red",int num=1)
-	:id(id),name(name),health(health),ack(ack),headq(headq),curArm(nullptr){
+	:id(id),name(name),health(health),ack(ack),headq(headq){
 		string message=headq+" "+name+" "+to_string(id)+" born";
 		mlog.log(message);
 		pos=0;
+		stopGo=false;
 	}
 	void place(int x){//武士放置在x的位置 
 		pos=x;
@@ -156,11 +181,9 @@ public:
 	virtual bool goAhead(int dir);
 	void prepare(){//武士准备战斗，武器排序 
 		if(arms.size()==0){
-			curArm = arms.end();
 			return;
 		}
 		arms.sort(Arm::arm_cmp_use);
-		curArm = arms.begin();
 	}
 	bool isDead(){
 		return health<=0;
@@ -193,30 +216,40 @@ public:
 		}
 		return false;
 	}
+	void transpower(int power,bool log=false);
+	void useArrow();
+	void clearArms();
+	void getPower();
+	void getPower(int power);
 	void report(){// 武士报告武器 
-		vector<int> cnt(3,0);
+		clearArms(); 
+		arms.sort(Arm::arm_cmp_report);
+		string message=totName()+" has ";
+		bool first=true; 
 		for(Arm* p:arms){
-			cnt[p->arm_id]++;
+			if(!first){
+				message+=","+p->introduce(); 
+			}else{
+				message+=p->introduce();
+				first=false;
+			}
 		}
-		char message[MESSAGE_LENGTH];
-		sprintf(message,"%s %s %d has %d sword %d bomb %d arrow and %d elements"
-		,headq.c_str(),name.c_str(),id,cnt[0],cnt[1],cnt[2],health);
+		if(first){
+			message+="no weapon";
+		}
 		mlog.log(message);
 	}
-	virtual bool attack(Warrior* enemy){
-		if(curArm==arms.end())return false;
-		Arm* arm=*curArm;
-		arm->attack(this,enemy);
-		++curArm;
-		if(arm->used==0){
-			delete arm;
-			arms.remove(arm);
+	arrow* getArrow(){
+		for(Arm* arm:arms){
+			if(arm->arm_id==2){
+				return dynamic_cast<arrow*>(arm);
+			}
 		}
-		if(curArm==arms.end()){
-			curArm=arms.begin();
-		}
-		return true;
+		return nullptr;
 	}
+	bomb* getBomb();
+	sword* getSword();
+	virtual bool attack(Warrior* enemy,bool first=false);
 	virtual bool beAttacked(int harm);
 	virtual ~Warrior(){
 		for(auto &p:arms){
@@ -230,12 +263,19 @@ public:
 	double morale;//士气 
 	dragon(int id=1,int health=10,int ack=5,double morale=1,const string& headq="red",int num=1)
 	:Warrior(id,"dragon",health,ack,headq,num),morale(morale){
-		arms.push_back(ArmFactory::product(id%3));
-//		char message[100];
-//		sprintf(message,"It has a %s,and it's morale is %.2lf",arms[arm].c_str(),morale);
-//		mlog.log(message,false);
+		arms.push_back(ArmFactory::product(id%3,ack/5));
+		char message[MESSAGE_LENGTH];
+		sprintf(message,"Its morale is %.2lf",morale);
+		mlog.log(message,false);
+	}
+	void moraleUp(){
+		morale+=0.2;
+	}
+	void moraleDown(){
+		morale-=0.2;
 	}
 	void yelled(int c_id=1){
+		if(morale<=0.8)return;
 		char message[MESSAGE_LENGTH];
 		sprintf(message,"%s yelled in city %d"
 		,totName().c_str(),c_id);
@@ -246,8 +286,8 @@ class ninja:public Warrior{
 public:
 	ninja(int id=1,int health=10,int ack=5,const string& headq="red",int num=1)
 	:Warrior(id,"ninja",health,ack,headq,num){
-		arms.push_back(ArmFactory::product(id%3));
-		arms.push_back(ArmFactory::product((id+1)%3));
+		arms.push_back(ArmFactory::product(id%3,ack/5));
+		arms.push_back(ArmFactory::product((id+1)%3,ack/5));
 //		char message[100];
 //		sprintf(message,"It has a %s and a %s",arms[leftArm].c_str(),arms[rightArm].c_str());
 //		mlog.log(message,false);
@@ -256,16 +296,25 @@ public:
 
 class iceman:public Warrior{
 public:
+	int steps;
 	iceman(int id=1,int health=10,int ack=5,const string& headq="red",int num=1)
 	:Warrior(id,"iceman",health,ack,headq,num){
-		arms.push_back(ArmFactory::product(id%3));
+		arms.push_back(ArmFactory::product(id%3,ack/5));
 //		char message[100];
 //		sprintf(message,"It has a %s",arms[arm].c_str());
 //		mlog.log(message,false);
+		steps=0;
 	}
 	virtual bool goAhead(int dir){//武士朝前走 
-		health -= health/10;
-		return Warrior::goAhead(dir);
+//		health -= health/10;
+		bool res=Warrior::goAhead(dir);
+		if(steps){
+			if(health>9)health-=9;
+			else health=1;
+			ack+=20;//需要注意这里 生命值在无法减少时是否需要加攻击 
+		}
+		steps^=1;
+		return res;
 	}
 };
 class lion:public Warrior{
@@ -277,12 +326,14 @@ public:
 		char message[MESSAGE_LENGTH];
 		sprintf(message,"Its loyalty is %d",loyalty);
 		mlog.log(message,false);
-		arms.push_back(ArmFactory::product(id%3));
 	}
 	virtual bool goAhead(int dir){//武士朝前走 
 		bool res=Warrior::goAhead(dir);
-		loyalty-=lionk;
+//		loyalty-=lionk;
 		return res;
+	}
+	void loyalDown(){
+		loyalty-=lionk;
 	}
 	void run(){
 		mlog.log(totName()+" ran away");
@@ -299,21 +350,17 @@ public:
 	void wolfgetArmFrom(Warrior* enemy,int c_id){
 		if(enemy->arms.size()==0)
 			return;
-		enemy->arms.sort(Arm::arm_cmp_get);
-		int arm_id=(*(enemy->arms).begin())->arm_id,num=0;
+		bool hasArm[3]={0};
+		for(Arm* arm:arms){
+			hasArm[arm->arm_id]=true;
+		}
 		enemy->arms.remove_if([&](Arm *arm){
-			if(arm_id<arm->arm_id)return false;
-			if(arms.size()>=MAX_ARMS)return false; 
-			++num;
+			if(hasArm[arm->arm_id])
+				return false; 
+			hasArm[arm->arm_id]=true; 
 			arms.push_back(arm);
 			return true;
 		});
-		if(num>0){
-			char message[MESSAGE_LENGTH];
-			sprintf(message,"%s took %d %s from %s in city %d"
-			,totName().c_str(),num,armNames[arm_id].c_str(),enemy->totName().c_str(),c_id);
-			mlog.log(message);
-		}
 	}
 };
 
@@ -331,6 +378,7 @@ private:
 	int lionk;//lion每走一步下降 
 	int dir;//武士走的方向 
 	list<Warrior*> enemys; //已经到达总部的敌人 
+	set<Warrior*> reported; //报告过的敌人 
 public:
 	string name;
 	bool stop;
@@ -369,15 +417,26 @@ public:
 					hero =static_cast<Warrior*>(new wolf(w_id++,HP[hero_id],ACK[hero_id],name,count[hero_id]));
 					break;
 			}
+			hero->clearArms();
 			return hero;
 		}
 		return nullptr;
 	}
+	void lionRunReport(){
+		warriors.remove_if([&](Warrior* p){
+			lion* lp=dynamic_cast<lion*>(p);
+			if(lp!=nullptr && lp->loyalty<=0&&lp->pos==pos){
+				lp->run();
+				delete p;
+				return true;
+			}
+			return false;
+		});
+	}
 	void lionRun(){//lion 逃跑 
 		warriors.remove_if([](Warrior* p){
 			lion* lp=dynamic_cast<lion*>(p);
-			if(lp!=nullptr && lp->loyalty<=0){
-//				lp->run();//lion run 
+			if(lp!=nullptr && lp->loyalty<=0&&!lp->stopGo){
 				delete p;
 				return true;
 			}
@@ -395,14 +454,17 @@ public:
 	}
 	void goAhead(){//所有武士前进一步 
 		for(auto &p:warriors){
-			p->goAhead(dir);
+			if(!p->stopGo)p->goAhead(dir);
 		}
 	}
 	void report(){//报告基地情况 
 		string message=to_string(power)+" elements in "+name+" headquarter";
 		mlog.log(message);
 	}
-	void warriorReport(){//报告武士情况 
+	void warriorReport(){//报告武士情况
+		warriors.sort([](Warrior* a,Warrior* b){
+			return a->pos < b->pos;	
+		});
 		for(auto &p:warriors){
 			p->report();
 		}
@@ -410,30 +472,26 @@ public:
 	bool enemyReport(){
 //		cout<<"here"<<stop<<endl;
 		for(auto &p:enemys){
+			if(reported.count(p))continue;
+			reported.insert(p);
 			char message[MESSAGE_LENGTH];
 			sprintf(message,"%s reached %s headquarter with %d elements and force %d"
 			,p->totName().c_str(),name.c_str(),p->health,p->ack);
 			mlog.log(message);
 		}
-		if(enemys.size()!=0){
+		if(enemys.size()>=2){
 			mlog.log(name+" headquarter was taken");
 			return true;
 		}
 		return false;
 	}
 	bool bornNext(){//孕育下一个武士 
-		if(stop){
-//			mlog.log(name+" headquarter stops making warriors");
-//			stop=true;
-			return false;
-		}
 		Warrior* war;
 		war=born(order[cur]);
-		cur=(cur+1)%order.size();
 		if(war==nullptr){
-			stop=true;
 			return false;
 		}
+		cur=(cur+1)%order.size();
 		war->place(pos);
 		warriors.push_back(war);
 		return true;
@@ -442,6 +500,17 @@ public:
 		for(auto &wa:warriors){
 			delete wa;
 		}
+	}
+	void getPower(int _power){
+		power+=_power; 
+	}
+	bool tranpower(Warrior* w){
+		if(power>=8){
+			power-=8;
+			w->health+=8;
+			return true;
+		}
+		return false;
 	}
 };
 /*
@@ -470,33 +539,111 @@ bool Warrior::goAhead(int dir){//武士朝前走
 		mlog.citys[pos-1].addWarrior(this);
 	}else if(pos==0){
 		(mlog.h1)->enemysReach(this);
+		stopGo=true;
 	}else if(pos==N+1){
 		(mlog.h2)->enemysReach(this);
+		stopGo=true;
 	}
 	return true; 
-//		char message[MESSAGE_LENGTH];
-//		message[0]=0;
-//		if(pos==0&&dir==-1){
-//			sprintf(message,"%s reached red headquarter with %d elements and force %d"
-//			,totName().c_str(),health,ack);
-//		}else if(pos==mlog.citys.size()+1&&dir==1){
-//			sprintf(message,"%s reached blue headquarter with %d elements and force %d"
-//			,totName().c_str(),health,ack);
-//		}
-//		if(message[0]==0){
-//			return false;
-//		}
-//		mlog.log(message);
-//		if(pos==0){
-//			mlog.log("red headquarter was taken");
-//		}else{
-//			mlog.log("blue headquarter was taken");
-//		}
+}
+void Warrior::transpower(int power,bool log){
+	if(headq=="red"){
+		(mlog.h1)->getPower(power);
+	}else if(headq=="blue"){
+		(mlog.h2)->getPower(power);
+	}
+	if(log){
+		char message[MESSAGE_LENGTH]; 
+		sprintf(message,"%s earned %d elements for his headquarter",
+			totName().c_str(),power);
+		mlog.log(message); 
+	}
+}
+bomb* Warrior::getBomb(){
+	for(Arm* arm:arms){
+		if(arm->arm_id==1){
+			return dynamic_cast<bomb*>(arm);
+		}
+	}
+	return nullptr;
+}
+sword* Warrior::getSword(){
+	for(Arm* arm:arms){
+		if(arm->arm_id==0){
+			return dynamic_cast<sword*>(arm);
+		}
+	}
+	return nullptr;
+}
+void Warrior::useArrow(){
+	int dir=1;
+	if(headq=="blue")dir=-1;
+	int nxt=pos+dir;
+	if(nxt==mlog.N+1||nxt==0){
+		return;
+	}
+	arrow *arm=getArrow(); 
+	if(arm==nullptr)return; //没有弓箭则返回 
+	Warrior* war=nullptr;
+	if(headq=="blue"){
+		war=mlog.citys[nxt-1].getRedWarrior();
+	}else if(headq=="red"){
+		war=mlog.citys[nxt-1].getBlueWarrior();
+	}
+	if(war==nullptr)return;//没有敌人则返回 
+	arm->attack(this,war);
+	char message[MESSAGE_LENGTH];
+	if(war->isDead()){
+		sprintf(message,"%s shot and killed %s",this->totName().c_str(),war->totName().c_str());
+		 
+	}else{
+		sprintf(message,"%s shot",this->totName().c_str());
+//		cout<<nxt<<endl;
+	}
+	mlog.log(message); 
+	clearArms();//清理武器 
+}
+void Warrior::clearArms(){
+	arms.remove_if([](Arm* arm){
+		if(arm->isDestory()){
+			delete arm;
+			return true;
+		}
+		return false;
+	});
+}
+void Warrior::getPower(){
+	if(headq=="red"){
+		(mlog.h1)->tranpower(this);
+	}else{
+		(mlog.h2)->tranpower(this);
+	}
+}
+bool Warrior::attack(Warrior* enemy,bool first){
+	//武器如果是剑 
+	sword* arm=getSword(); 
+	bool tmpArm=false;
+	if(arm==nullptr){
+		tmpArm=true;
+		arm=new sword(0);
+	}
+	arm->attack(this,enemy,first);
+	this->clearArms();
+	if(tmpArm){
+		delete arm;
+	}
+	return true;
+}
+void Warrior::getPower(int power){
+	if(power<=0)return;
+	health+=power;
 }
 /*
 arm implements
 */
-bool Arm::attack(Warrior* owner,Warrior* enemy){
+
+
+bool Arm::attack(Warrior* owner,Warrior* enemy,bool first){
 	int harm=owner->ack*ackp/100;
 	if(this->arm_id!=0)
 		--this->used;
@@ -504,6 +651,47 @@ bool Arm::attack(Warrior* owner,Warrior* enemy){
 	if(this->arm_id==1&&owner->name!="ninja"){
 		owner->beAttacked(harm/2);
 	}
+	return true;
+}
+bool Arm::isDestory(){
+	return this->used==0;
+} 
+bool sword::isDestory(){
+	return this->ack==0;
+}
+string Arm::introduce(){
+	return armNames[arm_id];
+}
+string arrow::introduce(){
+	return Arm::introduce()+"("+to_string(used)+")";
+}
+string sword::introduce(){
+	return Arm::introduce()+"("+to_string(ack)+")";
+}
+
+bool sword::attack(Warrior* owner,Warrior* enemy,bool first){
+	char message[MESSAGE_LENGTH];
+	if(first){
+		sprintf(message,"%s attacked %s in city %d with %d elements and force %d",
+		owner->totName().c_str(),enemy->totName().c_str(),owner->pos,owner->health,owner->ack);
+	}else{
+		sprintf(message,"%s fought back against %s in city %d",
+		owner->totName().c_str(),enemy->totName().c_str(),owner->pos);
+	}
+	mlog.log(message);
+	int harm=owner->ack+this->ack;
+	if(!first){
+		harm=owner->ack/2+this->ack;
+	}
+	//dosome 
+	this->ack *= 4;
+	this->ack /= 5;
+	enemy->beAttacked(harm);
+	return true;
+}
+bool arrow::attack(Warrior* owner,Warrior* enemy,bool first){
+	enemy->beAttacked(ack); 
+	--this->used;
 	return true;
 }
 /*
@@ -564,70 +752,142 @@ void City::lionRun(){
 	});
 }
 list<Warrior*> City::battle(Warrior* w1,Warrior* w2){
+	if(w1->isDead()&&w2->isDead())return {};
+	int hal1=w1->health,hal2=w2->health;
 	w1->prepare();
 	w2->prepare();
-	while(true){
-		if(!w1->isDead()){
-			w1->attack(w2);
-		}else{
-			break;
-		}
-		if(!w2->isDead()){
-			w2->attack(w1);
-		}else{
-			break;
-		}
-		if(w1->noMoreChange()&&w2->noMoreChange()){
-			break;
+//	if(mlog.now/60==3){
+//		printf("here");
+//	}
+	bool hasAck=false;
+	if(!w1->isDead()&&!w2->isDead()){
+		hasAck=true;
+		w1->attack(w2,true);
+		if(!w2->isDead()&&w2->name!="ninja"){
+			w2->attack(w1,false);
 		}
 	}
 	char message[MESSAGE_LENGTH];
-	//交换两个武士使得红武士在前
-	if(c_id%2==0){
-		swap(w1,w2);
+	//死亡判断 
+	if(hasAck&&w1->isDead()&&!w2->isDead()){
+		sprintf(message,"%s was killed in city %d"
+		,(w1->totName()).c_str(),c_id);
+		mlog.log(message);
+
+	}else if(hasAck&&!w1->isDead()&&w2->isDead()){
+		sprintf(message,"%s was killed in city %d"
+		,(w2->totName()).c_str(),c_id);
+		mlog.log(message);
+	}
+	
+	//处理dragon 
+	dragon* dra1=dynamic_cast<dragon*>(w1);
+	dragon* dra2=dynamic_cast<dragon*>(w2);
+	//dragon士气变化 
+	if(dra1!=nullptr&&!dra1->isDead()){
+		if(w2->isDead()){
+			dra1->moraleUp();
+		}else{
+			dra1->moraleDown();
+		}
+	}
+	if(dra2!=nullptr&&!dra2->isDead()){
+		if(w1->isDead()){
+			dra2->moraleUp();
+		}else{
+			dra2->moraleDown();
+		}
+	}
+	//dragon欢呼 
+	if(!w1->isDead()&& dra1!=nullptr){
+		dra1->yelled(c_id); 
+	}
+	// lion 降低忠诚
+	lion *ln1=dynamic_cast<lion*>(w1),*ln2=dynamic_cast<lion*>(w2);
+	if(ln1!=nullptr && !ln1->isDead()){
+		if(!w2->isDead()){
+			ln1->loyalDown();
+		}
+	}
+	if(ln2!=nullptr && !ln2->isDead()){
+		if(!w1->isDead()){
+			ln2->loyalDown();
+		}
+	}
+	//奖励武士 -> 生命元传递 ->  缴获武器
+	wolf* wf=nullptr;
+	if(w1->isDead()&&!w2->isDead()){ 
+		//wolfgetArmFrom
+		w2->getPower();
+		w2->transpower(power,true);
+		power=0;
+		wf = dynamic_cast<wolf*>(w2);
+		if(wf){
+			wf->wolfgetArmFrom(w1,c_id); 
+		} 
+		if(ln1){//lion战死 
+			w2->getPower(hal1);
+		} 
+	}else if(!w1->isDead()&&w2->isDead()){
+		w1->getPower();
+		w1->transpower(power,true);
+		power=0;
+		wf = dynamic_cast<wolf*>(w1);
+		if(wf){
+			wf->wolfgetArmFrom(w2,c_id);
+		}
+		if(ln2){//lion战死 
+			w1->getPower(hal2);
+		} 
 	}
 	list<Warrior*> ans;
 	if(!w1->isDead())ans.push_back(w1);
 	if(!w2->isDead())ans.push_back(w2);
-	if(!w1->isDead()&&!w2->isDead()){
-		sprintf(message,"both %s and %s were alive in city %d"
-		,(w1->totName()).c_str(),(w2->totName()).c_str(),c_id);
-	}else if(w1->isDead()&&!w2->isDead()){
-		sprintf(message,"%s killed %s in city %d remaining %d elements"
-		,(w2->totName()).c_str(),(w1->totName()).c_str(),c_id,w2->health);
-		w2->getArmFrom(w1);
-	}else if(!w1->isDead()&&w2->isDead()){
-		sprintf(message,"%s killed %s in city %d remaining %d elements"
-		,(w1->totName()).c_str(),(w2->totName()).c_str(),c_id,w1->health);
-		w1->getArmFrom(w2);
-	}else{
-		sprintf(message,"both %s and %s died in city %d"
-		,(w1->totName()).c_str(),(w2->totName()).c_str(),c_id);
-	}
-	mlog.log(message);
 	return ans;
 }
 void City::judge(){
 	if(red_warriors.size()==0||blue_warriors.size()==0){
+		red_warriors.remove_if([](Warrior* war){
+			return war->isDead();
+		});
+		blue_warriors.remove_if([](Warrior* war){
+			return war->isDead();
+		});
 		return;
 	}
-	dragon* dra=nullptr;
 	list<Warrior*> res;
-	if(c_id%2==1){
-		res=battle(*red_warriors.begin(),*blue_warriors.begin());
+	if(banner==1||(banner==0&&c_id%2==1)){
+		res=battle(red_warriors.front(),blue_warriors.front());
 		blue_warriors.pop_front();
 		red_warriors.pop_front();
 	}else{
-		res=battle(*blue_warriors.begin(),*red_warriors.begin());
+		res=battle(blue_warriors.front(),red_warriors.front());
 		blue_warriors.pop_front();
 		red_warriors.pop_front();
 	}
-	for(auto &p:res){
-		if(dra=dynamic_cast<dragon*>(p)){
-			dra->yelled(c_id);
+	if(res.size()==2){
+		winCnt=0;
+	}else if(res.size()==1){
+		Warrior* wa=res.front();
+		if(wa->headq == "red"){
+			if(winCnt>=0)winCnt++;
+			else winCnt=1;
+			if(winCnt==2&&banner!=1){
+				banner=1;
+				mlog.log("red flag raised in city "+to_string(c_id)); 
+			}
+		}else{
+			if(winCnt<0)winCnt--;
+			else winCnt=-1;
+			if(winCnt==-2&&banner!=2){
+				banner=2;
+				mlog.log("blue flag raised in city "+to_string(c_id));  
+			}
 		}
-		addWarrior(p);
 	}
+	for(Warrior* wa:res){
+		addWarrior(wa);
+	} 
 }
 void City::wolfPlunder(){
 	if(red_warriors.size()==0||blue_warriors.size()==0){
@@ -646,13 +906,97 @@ void City::wolfPlunder(){
 	}
 }
 
+void City::generatePower(){
+	power+=10;
+} 
+void City::transPower(){
+	int tot=red_warriors.size()+blue_warriors.size();
+	if(tot==1){
+		Warrior* war=nullptr;
+		if(red_warriors.size()==1){
+			war=red_warriors.front();
+		}else{
+			war=blue_warriors.front();
+		}
+		war->transpower(power,true);
+		power=0;
+	}
+}
+void City::useArrow(){
+	for(auto &p:red_warriors){
+		p->useArrow();
+	}
+	for(auto &p:blue_warriors){
+		p->useArrow();
+	}
+}
+void City::useBomb(){
+	if(red_warriors.empty()||blue_warriors.empty()){
+		return;
+	}
+	Warrior* w1=red_warriors.front(),*w2=blue_warriors.front();
+	if(w1->isDead() || w2->isDead())
+		return;
+	bomb* b1=w1->getBomb(),*b2=w2->getBomb();
+	if(b1 == nullptr && b2 == nullptr)
+		return;
+	sword *s1=w1->getSword(),*s2=w2->getSword();
+	sword ts1(0),ts2(0);//临时武器
+	if(s1==nullptr)s1=&ts1; 
+	if(s2==nullptr)s2=&ts2;
+	int winner=-1;
+	if(banner==1||(banner==0&&c_id%2==1)){
+		int harm=w1->ack+s1->ack;
+		if(w2->health<=harm){
+			winner=1;
+		}else if(w2->name!="ninja"){
+			harm=w2->ack/2+s2->ack;
+			if(w1->health<=harm){
+				winner=2;
+			}
+		}
+	}else{
+		int harm=w2->ack+s2->ack;
+		if(w1->health<=harm){
+			winner=2;
+		}else if(w1->name!="ninja"){
+			harm=w1->ack/2+s1->ack;
+			if(w2->health<=harm){
+				winner=1;
+			}
+		}
+	}
+	char message[MESSAGE_LENGTH];
+	if(winner==1&&b2!=nullptr){
+		sprintf(message,"%s used a bomb and killed %s",w2->totName().c_str(),w1->totName().c_str());	
+	}else if(winner==2&&b1!=nullptr){
+		sprintf(message,"%s used a bomb and killed %s",w1->totName().c_str(),w2->totName().c_str());	
+	}
+	if((winner==1&&b2!=nullptr)||(winner==2&&b1!=nullptr)){
+		w1->health=w2->health=0;
+		mlog.log(message);
+	}
+}
+Warrior* City::getRedWarrior(){
+	if(red_warriors.empty())
+		return nullptr;
+	return red_warriors.front();
+}
+
+Warrior* City::getBlueWarrior(){
+	if(blue_warriors.empty())
+		return nullptr;
+	return blue_warriors.front();
+}
 /*
 World implement
 */
-void World::reset(Headquarter* _h1,Headquarter *_h2,int N){
+void World::reset(Headquarter* _h1,Headquarter *_h2,int N,int R){
 	h1=_h1;
 	h2=_h2;
 	citys.clear();
+	this->N=N;
+	this->R=R;
 	for(int i=0;i<N;i++){
 		citys.emplace_back(City(i+1));
 	}
@@ -664,9 +1008,11 @@ bool World::addTime(){
 		h1->bornNext();
 		h2->bornNext();
 	}else if(c==5){
+		h1->lionRunReport();
 		for(int i=0;i<citys.size();i++){
 			citys[i].lionRun();
 		}
+		h2->lionRunReport();
 		h1->lionRun();
 		h2->lionRun();
 	}else if(c==10){
@@ -679,14 +1025,26 @@ bool World::addTime(){
 		bool r2=h2->enemyReport();
 		if(r1||r2)
 			return true;
-	}else if(c==35){
-		for(int i=1;i<=citys.size();i++){
-			citys[i-1].wolfPlunder();
+	}else if(c==20){
+		for(int i=0;i<citys.size();i++){
+			citys[i].generatePower();
 		}
+	}else if(c==30){
+		for(int i=0;i<citys.size();i++){
+			citys[i].transPower();
+		}
+	}else if(c==35){
+		for(int i=0;i<citys.size();i++){
+			citys[i].useArrow();
+		}
+	}else if(c==38){
+		for(int i=0;i<citys.size();i++){
+			citys[i].useBomb();
+		} 
 	}else if(c==40){
 		//battle
-		for(int i=1;i<=citys.size();i++){
-			citys[i-1].judge();
+		for(int i=0;i<citys.size();i++){
+			citys[i].judge();
 		}
 		h1->clearDead();
 		h2->clearDead();
@@ -694,12 +1052,9 @@ bool World::addTime(){
 		h1->report();
 		h2->report();
 	}else if(c==55){
-//		h1->warriorReport();
-//		h2->warriorReport();
+		h1->warriorReport();
+		h2->warriorReport();
 		//battle
-		for(int i=1;i<=citys.size();i++){
-			citys[i-1].warriorReport();
-		}
 	}
 	++now;
 	return false;
@@ -719,8 +1074,8 @@ int main(){
 	int T;
 	cin>>T;
 	for(int cs=1;cs<=T;cs++){
-		int M,N,K,TIME;
-		cin>>M>>N>>K>>TIME;
+		int M,N,K,R,TIME;
+		cin>>M>>N>>R>>K>>TIME;
 		for(int i=0;i<5;i++){
 			cin>>HP[i];
 		}
@@ -732,12 +1087,13 @@ int main(){
 		vector<int> o2={3,0,1,2,4};
 		Headquarter h1(o1,"red",M,0,K,1);
 		Headquarter h2(o2,"blue",M,N+1,K,-1);
-		mlog.reset(&h1,&h2,N);
+		mlog.reset(&h1,&h2,N,R);
 		TIME++;
 		while(TIME--){
 			if(mlog.addTime())
 				break;
 		}
+//		break;
 	}
 	return 0;
 }

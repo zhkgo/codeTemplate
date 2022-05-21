@@ -57,6 +57,8 @@
 
 &nbsp; &nbsp; &nbsp;&nbsp; ✅[visitor模式](./design_mode/visitor/)
 
+&nbsp; &nbsp; &nbsp;&nbsp; ✅[单例模式](./design_mode/singleInstance/)
+
 ### 🎲涨见识
 
 看些大佬的操作涨涨见识。

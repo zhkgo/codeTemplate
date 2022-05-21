@@ -1,29 +1,6 @@
-## 🚀🚀🚀代码仓库🚀🚀🚀
+## 🚀🚀🚀zhkgo的代码仓库🚀🚀🚀
 
 存些想存的代码。
-
-### 🀄常规的模板
-
-看别人的模板虽然整理的很好，但是因为不熟悉从来没用上。终究还是要自己来写模板、整理模板。
-
-&nbsp; &nbsp; &nbsp;&nbsp; ✅[树状数组](./template_codes/BIT/BIT.cpp)
-
-&nbsp; &nbsp; &nbsp;&nbsp; ✅[字符串哈希](./template_codes/stringHash/stringHash.cpp)
-
-&nbsp; &nbsp; &nbsp;&nbsp; ✅[字符串哈希-双模数](./template_codes/stringHash/stringDoubleHash.cpp)
-
-&nbsp; &nbsp; &nbsp;&nbsp; ✅[字典树](./template_codes/Trie/Trie.cpp)
-
-
-&nbsp; &nbsp; &nbsp;&nbsp; ✅[动态开点线段树区间加](./template_codes/segmentTree/segmentTree_add.h)
-
-&nbsp; &nbsp; &nbsp;&nbsp; ✅[动态开点线段树区间赋值](./template_codes/segmentTree/segmentTree_update.h)
-
-&nbsp; &nbsp; &nbsp;&nbsp; ✅[动态开点线段树区间加-重载new加速](./template_codes/segmentTree/segmentTree_add_fast.h)
-
-&nbsp; &nbsp; &nbsp;&nbsp; ✅[动态开点线段树区间赋值-重载new加速](./template_codes/segmentTree/segmentTree_update_fast.h)
-
-&nbsp; &nbsp; &nbsp;&nbsp; ✅[动态开点线段树区间赋值MAX-重载new加速](./template_codes/segmentTree/segmentTree_update_max_fast.h)
 
 ### 🔨部分STL等c++内置函数库的简单实现
 
@@ -53,6 +30,29 @@
 
 &nbsp; &nbsp; &nbsp;&nbsp; ❌魔兽世界重制版——智能指针+模块化+RPC接口
 
+### 🀄常规的模板
+
+看别人的模板虽然整理的很好，但是因为不熟悉从来没用上。终究还是要自己来写模板、整理模板。
+
+&nbsp; &nbsp; &nbsp;&nbsp; ✅[树状数组](./template_codes/BIT/BIT.cpp)
+
+&nbsp; &nbsp; &nbsp;&nbsp; ✅[字符串哈希](./template_codes/stringHash/stringHash.cpp)
+
+&nbsp; &nbsp; &nbsp;&nbsp; ✅[字符串哈希-双模数](./template_codes/stringHash/stringDoubleHash.cpp)
+
+&nbsp; &nbsp; &nbsp;&nbsp; ✅[字典树](./template_codes/Trie/Trie.cpp)
+
+
+&nbsp; &nbsp; &nbsp;&nbsp; ✅[动态开点线段树区间加](./template_codes/segmentTree/segmentTree_add.h)
+
+&nbsp; &nbsp; &nbsp;&nbsp; ✅[动态开点线段树区间赋值](./template_codes/segmentTree/segmentTree_update.h)
+
+&nbsp; &nbsp; &nbsp;&nbsp; ✅[动态开点线段树区间加-重载new加速](./template_codes/segmentTree/segmentTree_add_fast.h)
+
+&nbsp; &nbsp; &nbsp;&nbsp; ✅[动态开点线段树区间赋值-重载new加速](./template_codes/segmentTree/segmentTree_update_fast.h)
+
+&nbsp; &nbsp; &nbsp;&nbsp; ✅[动态开点线段树区间赋值MAX-重载new加速](./template_codes/segmentTree/segmentTree_update_max_fast.h)
+
 ### ✨设计模式
 
 &nbsp; &nbsp; &nbsp;&nbsp; ✅[visitor模式](./design_mode/visitor/)
@@ -64,5 +64,4 @@
 看些大佬的操作涨涨见识。
 
 &nbsp; &nbsp; &nbsp;&nbsp; ✅[unorder_map哈希碰撞的解决](./extend_codes/hashHitOfUMP.cpp)
-
 

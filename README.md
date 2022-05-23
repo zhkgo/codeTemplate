@@ -2,7 +2,7 @@
 
 存些想存的代码。
 
-### 🔨部分STL等c++内置函数库的简单实现
+### 🔨C++内置库的简单实现
 
 &nbsp; &nbsp; &nbsp;&nbsp; ✅[vector类](./inner_cpp/vector/vector.cpp)
 
@@ -12,11 +12,16 @@
 
 &nbsp; &nbsp; &nbsp;&nbsp; ✅[share_ptr类](./inner_cpp/smart_ptr/share_ptr.h)
 
+
+### 🌌线程
+
 &nbsp; &nbsp; &nbsp;&nbsp; ✅[基于队列和锁的线程池实现](./inner_cpp/threadpool/threadpool.h)
 
 &nbsp; &nbsp; &nbsp;&nbsp; ✅[无锁队列实现](./inner_cpp/lockfree_queue/lckfree_queue.h)
 
 &nbsp; &nbsp; &nbsp;&nbsp; ✅[基于无锁队列的线程池实现](./inner_cpp/lockfree_queue/threadpool.h)
+
+&nbsp; &nbsp; &nbsp;&nbsp; ✅[多线程归并排序](./inner_cpp/mutiMergeSort)
 
 ### ⚔游戏模块
 

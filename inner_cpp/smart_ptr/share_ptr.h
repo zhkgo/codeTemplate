@@ -1,12 +1,13 @@
 #ifndef SHARE_PTR_H
 #define SHARE_PTR_H
+#include<algorithm>
 template<typename T>
 class share_ptr{
 private:
 	T* data;
 	int* num;
 public:
-	//¹¹Ôìº¯Êı
+	//æ„é€ å‡½æ•°
 	share_ptr(T* ptr=nullptr):data(ptr){
 		if(ptr==nullptr){
 			num=nullptr;
@@ -15,50 +16,43 @@ public:
 		num=new int;
 		*num=1;
 	}
-	
-	//Îö¹¹º¯Êı 
-	//Èônum±í    
+	//ææ„å‡½æ•°
 	~share_ptr(){
 		if(num==nullptr)return;
 		--(*num);
 		if(*num==0){
 			delete num;
 			delete data;
-			data=nullptr;
 		}
 	}
-	
-	//ÒıÓÃ¹¹Ôìº¯Êı
-	//¸´ÖÆÖ¸Õë²¢ÇÒ¼ÆÊı+1 
+	void swap(share_ptr<T> &rhs){
+		std::swap(rhs.data,data);
+		std::swap(rhs.num,num);
+	}
+	//å¼•ç”¨æ„é€ å‡½æ•°
 	share_ptr(share_ptr<T> &rhs){
 		data=rhs.data;
 		num=rhs.num;
-		if(num!=nullptr)++(*num);
+		if(num!=nullptr)
+			++(*num);
 	}
-	
-	//ÓÒÖµÒıÓÃ¹¹Ôìº¯Êı 
+	//ç§»åŠ¨æ„é€ å‡½æ•°	
 	share_ptr(share_ptr<T> &&rhs){
-		data=rhs.data;
-		num=rhs.num;
-		rhs.data=nullptr;
-		rhs.num=nullptr;
+		this->swap(rhs);
 	}
 	
-	share_ptr<T>& operator=(share_ptr<T>& rhs)noexcept{
-		this->release();
-		data=rhs.data;
-		num=rhs.num;
-		if(num!=nullptr)++(*num);
+	share_ptr<T>& operator=(share_ptr<T> rhs)noexcept{
+		this->swap(rhs);
 		return *this;
 	}
-	share_ptr<T>& operator=(share_ptr<T>&& rhs)noexcept{
-		this->release();
-		data=rhs.data;
-		num=rhs.num;
-		rhs.data=nullptr;
-		rhs.num=nullptr;
-		return *this;
-	}
+	// share_ptr<T>& operator=(share_ptr<T>&& rhs)noexcept{
+	// 	this->release();
+	// 	data=rhs.data;
+	// 	num=rhs.num;
+	// 	rhs.data=nullptr;
+	// 	rhs.num=nullptr;
+	// 	return *this;
+	// }
 	T& operator*(){
 		return *data;
 	}

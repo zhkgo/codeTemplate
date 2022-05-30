@@ -1,0 +1,6 @@
+/home/user/project$ /home/user/project/ls_demo$ ls_1.txt
+ls_2.txt
+/home/user/project/ls_demo$ /home/user/project$ cd ls_demo
+ls
+cd ..
+/home/user/project$ 

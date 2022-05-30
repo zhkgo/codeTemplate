@@ -1,0 +1,35 @@
+/home/user/project$ args
+args.cpp
+check
+check.cpp
+fbomb.txt
+include
+ls_demo
+main
+main_sol
+Makefile
+output
+src
+testcase1.in
+testcase2.in
+testcase3.in
+/home/user/project$ hello world!
+args
+arg1
+/home/user/project$ args
+args.cpp
+check
+check.cpp
+fbomb.txt
+include
+ls_demo
+main
+main_sol
+Makefile
+output
+src
+testcase1.in
+testcase2.in
+testcase3.in
+/home/user/project$ No Match
+/home/user/project$ 

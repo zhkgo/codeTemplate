@@ -13,7 +13,7 @@
 &nbsp; &nbsp; &nbsp;&nbsp; ✅[share_ptr类](./inner_cpp/smart_ptr/share_ptr.h)
 
 
-### 🌌线程
+### 🌌线程进程
 
 &nbsp; &nbsp; &nbsp;&nbsp; ✅[基于队列和锁的线程池实现](./inner_cpp/threadpool/threadpool.h)
 
@@ -22,6 +22,9 @@
 &nbsp; &nbsp; &nbsp;&nbsp; ✅[基于无锁队列的线程池实现](./inner_cpp/lockfree_queue/threadpool.h)
 
 &nbsp; &nbsp; &nbsp;&nbsp; ✅[多线程归并排序](./inner_cpp/mutiMergeSort)
+
+&nbsp; &nbsp; &nbsp;&nbsp; ❌[shell简易实现](./inner_cpp/shellproject)
+
 
 ### ⚔游戏模块
 

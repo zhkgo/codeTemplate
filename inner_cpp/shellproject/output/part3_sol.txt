@@ -1,4 +1,4 @@
-/home/user/project$ args
+/home/zhkgo/clearn/shellproject$ args
 args.cpp
 check
 check.cpp
@@ -9,14 +9,15 @@ main
 main_sol
 Makefile
 output
+README.md
 src
 testcase1.in
 testcase2.in
 testcase3.in
-/home/user/project$ hello world!
+/home/zhkgo/clearn/shellproject$ hello world!
 args
 arg1
-/home/user/project$ args
+/home/zhkgo/clearn/shellproject$ args
 args.cpp
 check
 check.cpp
@@ -27,9 +28,10 @@ main
 main_sol
 Makefile
 output
+README.md
 src
 testcase1.in
 testcase2.in
 testcase3.in
-/home/user/project$ No Match
-/home/user/project$ 
+/home/zhkgo/clearn/shellproject$ No Match
+/home/zhkgo/clearn/shellproject$ 

@@ -1,0 +1,37 @@
+/home/zhkgo/clearn/shellproject$ args
+args.cpp
+check
+check.cpp
+fbomb.txt
+include
+ls_demo
+main
+main_sol
+Makefile
+output
+README.md
+src
+testcase1.in
+testcase2.in
+testcase3.in
+/home/zhkgo/clearn/shellproject$ hello world!
+args
+arg1
+/home/zhkgo/clearn/shellproject$ args
+args.cpp
+check
+check.cpp
+fbomb.txt
+include
+ls_demo
+main
+main_sol
+Makefile
+output
+README.md
+src
+testcase1.in
+testcase2.in
+testcase3.in
+/home/zhkgo/clearn/shellproject$ No Match
+/home/zhkgo/clearn/shellproject$ 

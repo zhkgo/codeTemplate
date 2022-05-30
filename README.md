@@ -23,7 +23,7 @@
 
 &nbsp; &nbsp; &nbsp;&nbsp; ✅[多线程归并排序](./inner_cpp/mutiMergeSort)
 
-&nbsp; &nbsp; &nbsp;&nbsp; ❌[shell简易实现](./inner_cpp/shellproject)
+&nbsp; &nbsp; &nbsp;&nbsp; ✅[shell简易实现](./inner_cpp/shellproject)
 
 
 ### ⚔游戏模块

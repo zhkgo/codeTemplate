@@ -1,1 +1,1 @@
-/home/user/project$ /home/user/project/ls_demo$ /home/user/project$ 
+/home/zhkgo/clearn/shellproject$ /home/zhkgo/clearn/shellproject/ls_demo$ /home/zhkgo/clearn/shellproject$ 

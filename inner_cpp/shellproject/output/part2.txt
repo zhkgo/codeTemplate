@@ -1,0 +1,6 @@
+/home/zhkgo/clearn/shellproject$ /home/zhkgo/clearn/shellproject/ls_demo$ ls_1.txt
+ls_2.txt
+/home/zhkgo/clearn/shellproject/ls_demo$ /home/zhkgo/clearn/shellproject$ cd ls_demo
+ls
+cd ..
+/home/zhkgo/clearn/shellproject$ 

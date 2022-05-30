@@ -8,11 +8,13 @@ typedef struct _node{
 }node;
 typedef struct _log_t {
     node* head;
+    node* tail;
 } log_t;
 
 void log_init(log_t *l);
 void log_destroy(log_t* l);
 void log_push(log_t* l, const char *item);
 char *log_search(log_t* l, const char *prefix);
+int match(const char *str,const char *prefix);
 
 #endif

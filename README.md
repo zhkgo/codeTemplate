@@ -61,6 +61,9 @@
 
 &nbsp; &nbsp; &nbsp;&nbsp; ✅[动态开点线段树区间赋值MAX-重载new加速](./template_codes/segmentTree/segmentTree_update_max_fast.h)
 
+&nbsp; &nbsp; &nbsp;&nbsp; ✅[矩阵类及其快速幂](./template_codes/Matrix/matrix.cpp)
+
+
 ### ✨设计模式
 
 &nbsp; &nbsp; &nbsp;&nbsp; ✅[visitor模式](./design_mode/visitor/)

@@ -1,7 +1,6 @@
 #include<cstdio>
 using namespace std;
-const int maxn=1e6+10;
-int n;
+
 typedef long long ll;
 /* 
 矩阵类模板及矩阵快速幂
@@ -73,7 +72,8 @@ mat powermi(mat in,int n){
     return ans;
 }
 
-
+const int maxn=1e6+10;
+int n;
 int main(){
     scanf("%d",&n);
     mat m(1),s;

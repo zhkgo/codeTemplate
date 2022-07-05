@@ -30,7 +30,7 @@ struct Matrix{
     //获取单位矩阵
     Matrix getE(){
         Matrix<T,N> e;
-        for(int i=0;i<2;i++){
+        for(int i=0;i<N;i++){
             e.a[i][i]=1;
         }
         return e;

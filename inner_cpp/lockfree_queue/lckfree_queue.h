@@ -19,18 +19,18 @@ public:
 	bool push(T node){
 		int oldv;
 		do{
-			oldv=tail;
+			oldv=tail.load(std::memory_order_relaxed);
 			if(size()==cap-1)return false;
-		}while(!tail.compare_exchange_strong(oldv,(oldv+1)%cap));
+		}while(!tail.compare_exchange_weak(oldv,(oldv+1)%cap));
 		data[oldv]=node;
 		return true;
 	}
 	T pop(){
 		int oldv;
 		do{
-			oldv=head;
+			oldv=head.load(std::memory_order_relaxed);
 			if(head==tail)return nullptr;
-		}while(!head.compare_exchange_strong(oldv,(oldv+1)%cap));
+		}while(!head.compare_exchange_weak(oldv,(oldv+1)%cap));
 		return data[oldv];
 	}
 	int size(){

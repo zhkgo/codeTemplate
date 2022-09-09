@@ -69,7 +69,7 @@
 
 &nbsp; &nbsp; &nbsp;&nbsp; ✅[矩阵类及其快速幂](./template_codes/Matrix/matrix.cpp)
 
- &nbsp;&nbsp;    ✅[ST表](./template_codes/SparseTable/SparseTable.cpp)
+&nbsp; &nbsp; &nbsp;&nbsp; ✅[ST表](./template_codes/SparseTable/SparseTable.cpp)
 
 
 ### ✨设计模式

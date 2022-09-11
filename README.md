@@ -67,6 +67,8 @@
 
 &nbsp; &nbsp; &nbsp;&nbsp; ✅[动态开点线段树区间赋值MAX-重载new加速](./template_codes/segmentTree/segmentTree_update_max_fast.h)
 
+&nbsp; &nbsp; &nbsp;&nbsp; ✅[动态开点线段树区间加MAX-重载new加速](./template_codes/segmentTree/segmentTree_add_max_fast.h)
+
 &nbsp; &nbsp; &nbsp;&nbsp; ✅[矩阵类及其快速幂](./template_codes/Matrix/matrix.cpp)
 
 &nbsp; &nbsp; &nbsp;&nbsp; ✅[ST表](./template_codes/SparseTable/SparseTable.cpp)

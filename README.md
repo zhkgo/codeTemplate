@@ -73,6 +73,7 @@
 
 &nbsp; &nbsp; &nbsp;&nbsp; ✅[ST表](./template_codes/SparseTable/SparseTable.cpp)
 
+&nbsp; &nbsp; &nbsp;&nbsp; ✅[二分查找函数](./template_codes/bsearch/bsearch.cpp)
 
 ### ✨设计模式
 
